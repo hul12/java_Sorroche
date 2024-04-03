@@ -13,17 +13,15 @@ import java.util.List;
 import com.epf.rentmanager.persistence.ConnectionManager;
 import com.epf.rentmanager.model.Client;
 import com.epf.rentmanager.exception.DaoException;
+import org.springframework.stereotype.Repository;
 
+
+@Repository
 public class ClientDao {
 	
 	private static ClientDao instance = null;
 	private ClientDao() {}
-	public static ClientDao getInstance() {
-		if(instance == null) {
-			instance = new ClientDao();
-		}
-		return instance;
-	}
+
 	
 	private static final String CREATE_CLIENT_QUERY = "INSERT INTO Client(nom, prenom, email, naissance) VALUES(?, ?, ?, ?);";
 	private static final String DELETE_CLIENT_QUERY = "DELETE FROM Client WHERE id=?;";
@@ -80,7 +78,7 @@ public class ClientDao {
 					String email = resultSet.getString("email");
 					LocalDate naissance = resultSet.getTimestamp("naissance").toLocalDateTime().toLocalDate();
 
-					return new Client(nom, prenom, email, naissance);
+					return new Client(1, nom, prenom, email, naissance);
 				} else {
 					return null;
 				}
@@ -104,7 +102,7 @@ public class ClientDao {
 				String email = resultSet.getString("email");
 				LocalDate naissance = resultSet.getDate("naissance").toLocalDate();
 
-				clients.add(new Client(nom, prenom, email, naissance));
+				clients.add(new Client(1, nom, prenom, email, naissance));
 			}
 		} catch (SQLException e) {
 			throw new DaoException("Erreur lors de la récupération de tous les clients.", e);

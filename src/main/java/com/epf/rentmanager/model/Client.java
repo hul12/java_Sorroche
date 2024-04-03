@@ -10,13 +10,18 @@ public class Client {
     private LocalDate dateNaissance;
 
     // structur
-    public Client(String nom, String prenom, String email, LocalDate naissance) {
+    public Client(int i, String nom, String prenom, String email, LocalDate naissance) {
         this.id = this.id;
         this.nom = this.nom;
         this.prenom = this.prenom;
         this.email = this.email;
         this.dateNaissance = dateNaissance;
     }
+
+    public Client() {
+
+    }
+
     public long getId() {
         return id;
     }

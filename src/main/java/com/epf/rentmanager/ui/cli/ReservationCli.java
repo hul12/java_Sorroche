@@ -11,7 +11,7 @@ import java.util.List;
 
 public class ReservationCli {
 
-    private static ReservationService reservationService = ReservationService.getInstance();
+
 
     public static void createReservation() {
         try {

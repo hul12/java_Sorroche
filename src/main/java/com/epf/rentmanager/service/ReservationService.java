@@ -6,22 +6,20 @@ import com.epf.rentmanager.exception.ServiceException;
 import com.epf.rentmanager.model.Reservation;
 
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
+@Service
 public class ReservationService {
+    private final ReservationDao reservationDao;
 
-    private static ReservationDao reservationDao = ReservationDao.getInstance();
-
-    private static ReservationService instance;
-
-    private ReservationService() {
+    @Autowired
+    private ReservationService(ReservationDao reservationDao) {
+        this.reservationDao = reservationDao;
     }
 
-    public static ReservationService getInstance() {
-        if (instance == null) {
-            instance = new ReservationService();
-        }
-        return instance;
-    }
+
 
     public long create(Reservation reservation) throws ServiceException {
         try {

@@ -12,21 +12,27 @@ import com.epf.rentmanager.dao.VehicleDao;
 import com.epf.rentmanager.exception.DaoException;
 import com.epf.rentmanager.exception.ServiceException;
 import com.epf.rentmanager.model.Client;
+import com.epf.rentmanager.model.Reservation;
+import com.epf.rentmanager.utils.IOUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import com.epf.rentmanager.model.Vehicule;
+
+@Service
 
 public class ClientService {
 	private ClientDao clientDao;
+
+	@Autowired
 	public static ClientService instance;
 
-	private ClientService() {
-		this.clientDao = ClientDao.getInstance();
-	}
-	
+
 	public static ClientService getInstance() {
 		if (instance == null) {
 			instance = new ClientService();
 		}
-		
+
 		return instance;
 	}
 

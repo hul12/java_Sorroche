@@ -60,7 +60,7 @@ public class ClientCli {
             System.out.print("Date de naissance (yyyy-mm-dd) : ");
             LocalDate naissance = IOUtils.readLocalDate();
 
-            Client client = new Client(nom, prenom, email, naissance);
+            Client client = new Client(1, nom, prenom, email, naissance);
             long id = clientService.create(client);
             System.out.println("Le client a été créé avec l'ID " + id);
         } catch (ServiceException e) {
