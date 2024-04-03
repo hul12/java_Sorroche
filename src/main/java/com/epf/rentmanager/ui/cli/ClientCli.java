@@ -10,7 +10,7 @@ import com.epf.rentmanager.service.ClientService;
 import com.epf.rentmanager.utils.IOUtils;
 
 public class ClientCli {
-    private static ClientService clientService = ClientService.getInstance();
+    public static ClientService clientService = ClientService.getInstance();
     private static Scanner scanner = new Scanner(System.in);
 
 

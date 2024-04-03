@@ -21,7 +21,7 @@ public class ReservationService {
 
 
 
-    public long create(Reservation reservation) throws ServiceException {
+    public static long create(Reservation reservation) throws ServiceException {
         try {
             return reservationDao.create(reservation);
         } catch (DaoException e) {
@@ -53,7 +53,7 @@ public class ReservationService {
         }
     }
 
-    public List<Reservation> findAll() throws ServiceException {
+    public static List<Reservation> findAll() throws ServiceException {
         try {
             return reservationDao.findAll();
         } catch (DaoException e) {

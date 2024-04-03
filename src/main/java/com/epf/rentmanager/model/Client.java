@@ -1,26 +1,23 @@
 package com.epf.rentmanager.model;
+import org.springframework.aop.ClassFilter;
+
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.temporal.Temporal;
 
 // Classe Client représentant un client dans la base de données
 public class Client {
-    private int id;
-    private String nom;
-    private String prenom;
-    private String email;
-    private LocalDate dateNaissance;
+    public int id;
+    public String nom;
+    public String prenom;
+    public String email;
+    public LocalDate dateNaissance;
 
-    // structur
+
     public Client(int i, String nom, String prenom, String email, LocalDate naissance) {
-        this.id = this.id;
-        this.nom = this.nom;
-        this.prenom = this.prenom;
-        this.email = this.email;
-        this.dateNaissance = dateNaissance;
-    }
-
-    public Client() {
 
     }
+
 
     public long getId() {
         return id;
@@ -51,6 +48,20 @@ public class Client {
     }
 
 
+    public CharSequence nom() {
+        return null;
+    }
 
+    public CharSequence prenom() {
+        return null;
+    }
+
+    public ClassFilter email() {
+        return null;
+    }
+
+    public Instant naissance() {
+        return null;
+    }
 }
 

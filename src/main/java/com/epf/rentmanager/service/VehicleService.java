@@ -4,23 +4,23 @@ import java.util.List;
 
 import com.epf.rentmanager.exception.DaoException;
 import com.epf.rentmanager.exception.ServiceException;
-import com.epf.rentmanager.model.Client;
 import com.epf.rentmanager.model.Vehicule;
-import com.epf.rentmanager.dao.ClientDao;
 import com.epf.rentmanager.dao.VehicleDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 @Service
 public class VehicleService {
 
-	private final VehicleDao vehicleDao;
+	private VehicleDao vehicleDao ;
 
 	@Autowired
-	private VehicleService(VehicleDao vehicleDao) {
+	public VehicleService() {
 		this.vehicleDao = vehicleDao;
 	}
+
+
+
 	public int count() throws ServiceException {
 		try {
 			return vehicleDao.count();

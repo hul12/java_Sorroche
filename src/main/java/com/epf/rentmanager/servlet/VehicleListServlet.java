@@ -12,6 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 import com.epf.rentmanager.exception.ServiceException;
 import com.epf.rentmanager.model.Vehicule;
 import com.epf.rentmanager.service.VehicleService;
+import com.epf.rentmanager.utils.IOUtils;
+
+import static com.epf.rentmanager.ui.cli.ClientCli.clientService;
 
 @WebServlet("/cars")
 public class VehicleListServlet extends HttpServlet {
@@ -19,16 +22,14 @@ public class VehicleListServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        VehicleService vehicleService = VehicleService.getInstance();
-        List<Vehicule> vehicles;
+
         try {
-            vehicles = vehicleService.findAll();
-            request.setAttribute("vehicles", vehicles);
-            request.getRequestDispatcher("/WEB-INF/views/vehicles/list.jsp").forward(request, response);
+            request.setAttribute("users", clientService.findAll());
         } catch (ServiceException e) {
-            // Gérer les erreurs de service
-            e.printStackTrace();
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Une erreur est survenue");
+            IOUtils.print(e.getMessage());
         }
+
+        this.getServletContext().getRequestDispatcher("/WEB-INF/views/users/list.jsp").forward(request, response);
+
     }
 }

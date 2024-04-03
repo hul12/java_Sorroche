@@ -24,7 +24,12 @@ public class HomeServlet extends HttpServlet {
         private static final long serialVersionUID = 1L;
 		protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
             VehicleService vehicleService = new VehicleService();
-            int vehicleCount = vehicleService.count();
+            int vehicleCount = 0;
+            try {
+                vehicleCount = vehicleService.count();
+            } catch (ServiceException e) {
+                throw new RuntimeException(e);
+            }
             request.setAttribute("vehicleCount", vehicleCount);
             this.getServletContext().getRequestDispatcher("/WEB-INF/views/home.jsp").forward(request, response);
 

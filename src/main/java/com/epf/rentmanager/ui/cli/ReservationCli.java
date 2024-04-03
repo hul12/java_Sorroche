@@ -26,7 +26,7 @@ public class ReservationCli {
             LocalDate fin = IOUtils.readLocalDate();
 
             Reservation reservation = new Reservation(0, clientId, vehicleId, debut, fin);
-            long id = reservationService.create(reservation);
+            long id = ReservationService.create(reservation);
             System.out.println("Réservation créée avec l'identifiant : " + id);
         } catch (ServiceException e) {
             System.err.println("Erreur lors de la création de la réservation : " + e.getMessage());
@@ -36,7 +36,7 @@ public class ReservationCli {
     public static void listAllReservations() {
         try {
             System.out.println("Liste de toutes les réservations :");
-            List<Reservation> reservations = reservationService.findAll();
+            List<Reservation> reservations = ReservationService.findAll();
             for (Reservation reservation : reservations) {
                 System.out.println(reservation);
             }

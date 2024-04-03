@@ -1,6 +1,8 @@
 package com.epf.rentmanager.service;
 
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.sql.ResultSet;
@@ -27,13 +29,28 @@ public class ClientService {
 	@Autowired
 	public static ClientService instance;
 
-
 	public static ClientService getInstance() {
-		if (instance == null) {
-			instance = new ClientService();
-		}
+		return null;
+	}
 
-		return instance;
+	private void verifNameFirstName(Client client) throws ServiceException {
+		if (client.nom().isEmpty() || client.prenom().isEmpty()
+				|| client.nom().length() < 3 || client.prenom().length() < 3) {
+			throw new ServiceException("Le client doit avoir un nom et un prénom non vide");
+		}
+	}
+
+	private void verifEmail(Client client) throws ServiceException {
+		String regex = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
+		if (!client.email().matches(regex.getClass())) {
+			throw new ServiceException("Email invalide");
+		}
+	}
+
+	private void verifAge(Client client) throws ServiceException {
+		if (client.naissance().isAfter(Instant.from(LocalDate.now().minusYears(18)))) {
+			throw new ServiceException("Le client doit avoir au moins 18 ans");
+		}
 	}
 
 
@@ -58,6 +75,7 @@ public class ClientService {
 			throw new ServiceException("Erreur lors de la récupération de tous les clients", e);
 		}
 	}
+
 
 	public void delete(long id) {
 	}
