@@ -1,76 +1,92 @@
 package com.epf.rentmanager.dao;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.stereotype.Repository;
-
 import com.epf.rentmanager.exception.DaoException;
 import com.epf.rentmanager.model.Client;
 import com.epf.rentmanager.persistence.ConnectionManager;
+import org.springframework.stereotype.Repository;
 
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 @Repository
 public class ClientDao {
 
-	@Autowired
-	private JdbcTemplate jdbcTemplate;
-
 	private static final String CREATE_CLIENT_QUERY = "INSERT INTO Client(nom, prenom, email, naissance) VALUES(?, ?, ?, ?);";
 	private static final String DELETE_CLIENT_QUERY = "DELETE FROM Client WHERE id=?;";
-	private static final String FIND_CLIENT_QUERY = "SELECT id, nom, prenom, email, naissance FROM Client WHERE id=?;";
-	private static final String FIND_CLIENTS_QUERY = "SELECT id, nom, prenom, email, naissance FROM Client;";
-
-	private RowMapper<Client> rowMapper = (rs, rowNum) -> new Client(
-			rs.getLong("id"),
-			rs.getString("nom"),
-			rs.getString("prenom"),
-			rs.getString("email"),
-			rs.getDate("naissance").toLocalDate()
-	);
-
-
+	private static final String FIND_CLIENT_BY_ID_QUERY = "SELECT id, nom, prenom, email, naissance FROM Client WHERE id=?;";
+	private static final String FIND_ALL_CLIENTS_QUERY = "SELECT id, nom, prenom, email, naissance FROM Client;";
+	private static final String UPDATE_CLIENT_QUERY = "UPDATE Client SET nom=?, prenom=?, email=?, naissance=? WHERE id=?;";
 
 	public long create(Client client) throws DaoException {
-		jdbcTemplate.update(CREATE_CLIENT_QUERY,
-				client.getNom(),
-				client.getPrenom(),
-				client.getEmail(),
-				Date.valueOf(client.getDateNaissance())
-		);
-
-		return 0;
+		try (Connection conn = ConnectionManager.getConnection();
+			 PreparedStatement pstmt = conn.prepareStatement(CREATE_CLIENT_QUERY, Statement.RETURN_GENERATED_KEYS)) {
+			pstmt.setString(1, client.getNom());
+			pstmt.setString(2, client.getPrenom());
+			pstmt.setString(3, client.getEmail());
+			pstmt.setDate(4, Date.valueOf(client.getDateNaissance()));
+			pstmt.executeUpdate();
+			try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+				if (generatedKeys.next()) {
+					return generatedKeys.getLong(1);
+				} else {
+					throw new DaoException("Creating user failed, no ID obtained.");
+				}
+			}
+		} catch (SQLException e) {
+			throw new DaoException("Problem occurred when creating client", e);
+		}
 	}
-
-
-	public int delete(long id) {
-		String sql = "DELETE FROM clients WHERE id = ?";
-		return jdbcTemplate.update(sql, id);
-	}
-
 
 	public Client findById(long id) throws DaoException {
-		return jdbcTemplate.queryForObject(FIND_CLIENT_QUERY, new Object[]{id}, rowMapper);
+		try (Connection conn = ConnectionManager.getConnection();
+			 PreparedStatement pstmt = conn.prepareStatement(FIND_CLIENT_BY_ID_QUERY)) {
+			pstmt.setLong(1, id);
+			try (ResultSet rs = pstmt.executeQuery()) {
+				if (rs.next()) {
+					return new Client(rs.getLong("id"), rs.getString("nom"), rs.getString("prenom"), rs.getString("email"), rs.getDate("naissance").toLocalDate());
+				}
+			}
+		} catch (SQLException e) {
+			throw new DaoException("Problem occurred when finding client by ID", e);
+		}
+		return null;
 	}
 
 	public List<Client> findAll() throws DaoException {
-		return jdbcTemplate.query(FIND_CLIENTS_QUERY, rowMapper);
+		List<Client> clients = new ArrayList<>();
+		try (Connection conn = ConnectionManager.getConnection();
+			 PreparedStatement pstmt = conn.prepareStatement(FIND_ALL_CLIENTS_QUERY);
+			 ResultSet rs = pstmt.executeQuery()) {
+			while (rs.next()) {
+				clients.add(new Client(rs.getLong("id"), rs.getString("nom"), rs.getString("prenom"), rs.getString("email"), rs.getDate("naissance").toLocalDate()));
+			}
+		} catch (SQLException e) {
+			throw new DaoException("Problem occurred when finding all clients", e);
+		}
+		return clients;
 	}
-	public int update(Client client) {
-		String sql = "UPDATE clients SET nom = ?, prenom = ?, email = ?, dateNaissance = ? WHERE id = ?";
-		return jdbcTemplate.update(sql,
-				client.getNom(),
-				client.getPrenom(),
-				client.getEmail(),
-				Date.valueOf(client.getDateNaissance()),
-				client.getId());
+
+	public int delete(long id) throws DaoException {
+		try (Connection conn = ConnectionManager.getConnection();
+			 PreparedStatement pstmt = conn.prepareStatement(DELETE_CLIENT_QUERY)) {
+			pstmt.setLong(1, id);
+			return pstmt.executeUpdate();
+		} catch (SQLException e) {
+			throw new DaoException("Problem occurred when deleting client", e);
+		}
+	}
+
+	public int update(Client client) throws DaoException {
+		try (Connection conn = ConnectionManager.getConnection();
+			 PreparedStatement pstmt = conn.prepareStatement(UPDATE_CLIENT_QUERY)) {
+			pstmt.setString(1, client.getNom());
+			pstmt.setString(2, client.getPrenom());
+			pstmt.setString(3, client.getEmail());
+			pstmt.setDate(4, Date.valueOf(client.getDateNaissance()));
+			pstmt.setLong(5, client.getId());
+			return pstmt.executeUpdate();
+		} catch (SQLException e) {
+			throw new DaoException("Problem occurred when updating client", e);
+		}
 	}
 }
