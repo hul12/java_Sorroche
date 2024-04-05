@@ -29,7 +29,7 @@ public class ClientCli {
 
             System.out.print("Choisissez une option: ");
             int choice = scanner.nextInt();
-            scanner.nextLine(); // Consommer la nouvelle ligne
+            scanner.nextLine();
 
             switch (choice) {
                 case 1:

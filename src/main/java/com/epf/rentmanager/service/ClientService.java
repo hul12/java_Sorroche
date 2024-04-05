@@ -33,7 +33,7 @@ public class ClientService {
 	}
 
 	public int update(Client client) throws DaoException {
-		return clientDao.update(client); // Assurez-vous que clientDao.update(Client client) existe et est correct.
+		return clientDao.update(client);
 	}
 
 

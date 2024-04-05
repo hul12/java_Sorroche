@@ -63,11 +63,11 @@ public class ReservationCli {
         try {
             System.out.print("Entrez l'ID du client: ");
             long clientId = scanner.nextLong();
-            // Valider l'existence du client avec clientService.findById(clientId);
+
 
             System.out.print("Entrez l'ID du véhicule: ");
             long vehicleId = scanner.nextLong();
-            // Valider l'existence du véhicule avec vehicleService.findById(vehicleId);
+
 
             System.out.print("Entrez la date de début (YYYY-MM-DD): ");
             LocalDate startDate = LocalDate.parse(scanner.next());

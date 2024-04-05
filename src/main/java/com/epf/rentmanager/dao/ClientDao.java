@@ -46,11 +46,11 @@ public class ClientDao {
 				client.getEmail(),
 				Date.valueOf(client.getDateNaissance())
 		);
-		// Assuming auto-generated ID retrieval is handled elsewhere or using JDBC features.
-		return 0; // Placeholder for actual ID retrieval logic
+
+		return 0;
 	}
 
-	// Dans ClientDao.java
+
 	public int delete(long id) {
 		String sql = "DELETE FROM clients WHERE id = ?";
 		return jdbcTemplate.update(sql, id);

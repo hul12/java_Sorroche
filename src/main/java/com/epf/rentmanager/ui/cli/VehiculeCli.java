@@ -28,7 +28,7 @@ public class VehiculeCli {
 
             System.out.print("Choisissez une option: ");
             int choice = scanner.nextInt();
-            scanner.nextLine(); // Consommer la nouvelle ligne après l'entier
+            scanner.nextLine();
 
             switch (choice) {
                 case 1:

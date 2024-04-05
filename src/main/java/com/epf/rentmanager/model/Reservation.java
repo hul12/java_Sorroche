@@ -21,7 +21,7 @@ public class Reservation {
         this.fin = fin;
     }
 
-    // Ajout d'un nouveau constructeur avec l'ID
+
     public Reservation(long id, long clientId, long vehicleId, LocalDate debut, LocalDate fin) {
         this.id = id;
         this.clientId = clientId;

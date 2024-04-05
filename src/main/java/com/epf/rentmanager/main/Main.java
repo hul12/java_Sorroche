@@ -41,17 +41,17 @@ public class Main {
             reservationService.create(reservation1);
             reservationService.findAll().forEach(System.out::println);
 
-            // Suppression d'un client (exemple)
+            // Suppression d'un client
             System.out.println("\nSuppression d'un client :");
             clientService.delete(client1.getId());
             System.out.println("Client supprimé avec succès.");
 
-            // Suppression d'un véhicule (exemple)
+            // Suppression d'un véhicule
             System.out.println("\nSuppression d'un véhicule :");
             vehicleService.delete(vehicule1.getId());
             System.out.println("Véhicule supprimé avec succès.");
 
-            // Suppression d'une réservation (exemple)
+            // Suppression d'une réservation
             System.out.println("\nSuppression d'une réservation :");
             reservationService.delete(reservation1.getId());
             System.out.println("Réservation supprimée avec succès.");
