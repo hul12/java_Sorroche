@@ -1,74 +1,99 @@
 package com.epf.rentmanager.ui.cli;
 
+import com.epf.rentmanager.exception.DaoException;
 import com.epf.rentmanager.model.Vehicule;
 import com.epf.rentmanager.service.VehicleService;
-import com.epf.rentmanager.exception.ServiceException;
-import com.epf.rentmanager.utils.IOUtils;
-import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.Scanner;
+
+@Component
 public class VehiculeCli {
 
-    private static VehicleService vehiculeService = VehicleService.getInstance();
+    @Autowired
+    private VehicleService vehicleService;
 
-    public static void createVehicule() {
-        try {
-            System.out.println("Création d'un nouveau véhicule :");
-            System.out.print("Constructeur : ");
-            String constructeur = IOUtils.readString();
-            System.out.print("Modèle : ");
-            String modele = IOUtils.readString();
-            System.out.print("Nombre de places : ");
-            int nbPlaces = IOUtils.readInt();
+    private Scanner scanner = new Scanner(System.in);
 
-            Vehicule vehicule = new Vehicule(constructeur, modele, nbPlaces);
-            long id = vehiculeService.create(vehicule);
-            System.out.println("Véhicule créé avec l'identifiant : " + id);
-        } catch (ServiceException e) {
-            System.err.println("Erreur lors de la création du véhicule : " + e.getMessage());
+    public void start() {
+        boolean running = true;
+        while (running) {
+            System.out.println("\nGestion des véhicules:");
+            System.out.println("1. Ajouter un véhicule");
+            System.out.println("2. Afficher tous les véhicules");
+            System.out.println("3. Supprimer un véhicule");
+            System.out.println("4. Quitter");
+
+            System.out.print("Choisissez une option: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // Consommer la nouvelle ligne après l'entier
+
+            switch (choice) {
+                case 1:
+                    addVehicule();
+                    break;
+                case 2:
+                    listVehicules();
+                    break;
+                case 3:
+                    deleteVehicule();
+                    break;
+                case 4:
+                    running = false;
+                    break;
+                default:
+                    System.out.println("Option non reconnue.");
+                    break;
+            }
         }
     }
 
-    public static void listAllVehicules() {
+    private void addVehicule() {
         try {
-            System.out.println("Liste de tous les véhicules :");
-            List<Vehicule> vehicules = vehiculeService.findAll();
+            System.out.print("Entrez le constructeur: ");
+            String constructeur = scanner.nextLine();
+
+            System.out.print("Entrez le modèle: ");
+            String modele = scanner.nextLine();
+
+            System.out.print("Entrez le nombre de places: ");
+            int nbPlaces = scanner.nextInt();
+
+            Vehicule vehicule = new Vehicule();
+            vehicule.setConstructeur(constructeur);
+            vehicule.setModele(modele);
+            vehicule.setNbPlaces(nbPlaces);
+
+            vehicleService.create(vehicule);
+
+            System.out.println("Véhicule ajouté avec succès.");
+        } catch (DaoException e) {
+            System.err.println("Erreur lors de l'ajout du véhicule: " + e.getMessage());
+        }
+    }
+
+    private void listVehicules() {
+        try {
+            List<Vehicule> vehicules = vehicleService.findAll();
             for (Vehicule vehicule : vehicules) {
                 System.out.println(vehicule);
             }
-        } catch (ServiceException e) {
-            System.err.println("Erreur lors de la récupération des véhicules : " + e.getMessage());
+        } catch (DaoException e) {
+            System.err.println("Erreur lors de la récupération des véhicules: " + e.getMessage());
         }
     }
 
-    public static void deleteVehicule() {
-        System.out.println("Suppression d'un véhicule :");
-        System.out.print("Identifiant du véhicule à supprimer : ");
-        long id = IOUtils.readLong();
-        vehiculeService.delete(id);
-        System.out.println("Véhicule avec l'identifiant " + id + " supprimé avec succès.");
-    }
+    private void deleteVehicule() {
+        try {
+            System.out.print("Entrez l'ID du véhicule à supprimer: ");
+            long id = scanner.nextLong();
+            vehicleService.delete(id);
 
-    public static void main(String[] args) {
-        System.out.println("Gestion des véhicules :");
-        System.out.println("a. Créer un véhicule");
-        System.out.println("b. Lister tous les véhicules");
-        System.out.println("e. Supprimer un véhicule");
-
-        System.out.print("Choix : ");
-        String choice = IOUtils.readString();
-
-        switch (choice) {
-            case "a":
-                createVehicule();
-                break;
-            case "b":
-                listAllVehicules();
-                break;
-            case "e":
-                deleteVehicule();
-                break;
-            default:
-                System.err.println("Choix invalide.");
+            System.out.println("Véhicule supprimé avec succès.");
+        } catch (DaoException e) {
+            System.err.println("Erreur lors de la suppression du véhicule: " + e.getMessage());
         }
     }
 }

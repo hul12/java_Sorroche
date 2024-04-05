@@ -3,6 +3,7 @@ package com.epf.rentmanager.servlet;
 import com.epf.rentmanager.exception.ServiceException;
 import com.epf.rentmanager.model.Vehicule;
 import com.epf.rentmanager.service.VehicleService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -13,6 +14,13 @@ import javax.servlet.http.HttpServletResponse;
 
 @WebServlet("/cars/create")
 public class VehicleCreateServlet extends HttpServlet {
+
+    @Autowired
+    VehicleService vehicleService;
+
+    public VehicleService getVehicleService() {
+        return vehicleService;
+    }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Affichage du formulaire de création de véhicule
@@ -30,7 +38,6 @@ public class VehicleCreateServlet extends HttpServlet {
 
         // Appel à la méthode de sauvegarde dans la base de données
         try {
-            VehicleService vehicleService = new VehicleService();
             long id = vehicleService.create(vehicule);
             response.sendRedirect(request.getContextPath() + "/vehicles"); // Redirection vers la liste des véhicules après création
         } catch (ServiceException e) {

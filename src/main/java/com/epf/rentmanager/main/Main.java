@@ -32,8 +32,8 @@ public class Main {
 
         // Test de la gestion des véhicules
         System.out.println("\nGestion des véhicules :");
-        VehiculeCli.createVehicule();
-        VehiculeCli.listAllVehicules();
+//        VehiculeCli.createVehicule();
+//        VehiculeCli.listAllVehicules();
         // VehiculeCli.deleteVehicule(); // Décommentez cette ligne pour tester la suppression de véhicule
 
         // Test de la gestion des réservations
