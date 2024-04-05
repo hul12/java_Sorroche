@@ -1,50 +1,53 @@
 package com.epf.rentmanager.servlet;
 
-import com.epf.rentmanager.exception.ServiceException;
+import com.epf.rentmanager.exception.DaoException;
 import com.epf.rentmanager.model.Vehicule;
 import com.epf.rentmanager.service.VehicleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
-import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
-@WebServlet("/cars/create")
+@WebServlet("/vehicles/create")
 public class VehicleCreateServlet extends HttpServlet {
 
-    @Autowired
-    VehicleService vehicleService;
+    private static final long serialVersionUID = 1L;
 
-    public VehicleService getVehicleService() {
-        return vehicleService;
+    @Autowired
+    private VehicleService vehicleService;
+
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, getServletContext());
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Affichage du formulaire de création de véhicule
         request.getRequestDispatcher("/WEB-INF/views/vehicles/create.jsp").forward(request, response);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Récupération des données du formulaire
-        String manufacturer = request.getParameter("manufacturer");
-        String model = request.getParameter("model");
-        int seats = Integer.parseInt(request.getParameter("seats"));
+        String constructeur = request.getParameter("constructeur");
+        String modele = request.getParameter("modele");
+        int nbPlaces = Integer.parseInt(request.getParameter("nbPlaces"));
 
-        // Création de l'objet Vehicule avec les données du formulaire
-        Vehicule vehicule = new Vehicule(manufacturer, model, seats);
+        Vehicule vehicule = new Vehicule();
+        vehicule.setConstructeur(constructeur);
+        vehicule.setModele(modele);
+        vehicule.setNbPlaces(nbPlaces);
 
-        // Appel à la méthode de sauvegarde dans la base de données
         try {
-            long id = vehicleService.create(vehicule);
-            response.sendRedirect(request.getContextPath() + "/vehicles"); // Redirection vers la liste des véhicules après création
-        } catch (ServiceException e) {
-            // Gestion des erreurs
-            request.setAttribute("errorMessage", "Erreur lors de la création du véhicule : " + e.getMessage());
+            vehicleService.create(vehicule);
+            response.sendRedirect(request.getContextPath() + "/vehicles");
+        } catch (DaoException e) {
+            request.setAttribute("errorMessage", "Erreur lors de la création du véhicule: " + e.getMessage());
             request.getRequestDispatcher("/WEB-INF/views/vehicles/create.jsp").forward(request, response);
         }
     }
 }
-

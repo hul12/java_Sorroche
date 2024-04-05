@@ -1,45 +1,64 @@
 package com.epf.rentmanager.main;
 
-
-import com.epf.rentmanager.exception.ServiceException;
+import com.epf.rentmanager.confi.AppConfiguration;
+import com.epf.rentmanager.exception.DaoException;
 import com.epf.rentmanager.model.Client;
 import com.epf.rentmanager.model.Reservation;
 import com.epf.rentmanager.model.Vehicule;
 import com.epf.rentmanager.service.ClientService;
 import com.epf.rentmanager.service.ReservationService;
 import com.epf.rentmanager.service.VehicleService;
-import com.epf.rentmanager.utils.IOUtils;
-import com.epf.rentmanager.ui.cli.ClientCli;
-import com.epf.rentmanager.ui.cli.VehiculeCli;
-import com.epf.rentmanager.ui.cli.ReservationCli;
-import com.epf.rentmanager.confi.AppConfiguration;
-
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import java.time.LocalDate;
 
 public class Main {
 
     public static void main(String[] args) {
         ApplicationContext context = new AnnotationConfigApplicationContext(AppConfiguration.class);
+
         ClientService clientService = context.getBean(ClientService.class);
         VehicleService vehicleService = context.getBean(VehicleService.class);
-        // Test de la gestion des clients
-        System.out.println("Gestion des clients :");
-        ClientCli.createClient();
-        ClientCli.listClients();
-        //ClientCli.deleteClient();
+        ReservationService reservationService = context.getBean(ReservationService.class);
 
-        // Test de la gestion des véhicules
-        System.out.println("\nGestion des véhicules :");
-//        VehiculeCli.createVehicule();
-//        VehiculeCli.listAllVehicules();
-        // VehiculeCli.deleteVehicule(); // Décommentez cette ligne pour tester la suppression de véhicule
+        try {
+            // Ajout et affichage de clients
+            System.out.println("Création et affichage des clients :");
+            Client client1 = new Client("Doe", "John", "john.doe@example.com", LocalDate.of(1980, 1, 1));
+            clientService.create(client1);
+            clientService.findAll().forEach(System.out::println);
 
-        // Test de la gestion des réservations
-        System.out.println("\nGestion des réservations :");
-        ReservationCli.createReservation();
-        ReservationCli.listAllReservations();
-        // ReservationCli.deleteReservation(); // Décommentez cette ligne pour tester la suppression de réservation
+            // Ajout et affichage de véhicules
+            System.out.println("\nCréation et affichage des véhicules :");
+            Vehicule vehicule1 = new Vehicule("Renault", "Clio", 5);
+            vehicleService.create(vehicule1);
+            vehicleService.findAll().forEach(System.out::println);
+
+            // Ajout et affichage de réservations
+            System.out.println("\nCréation et affichage des réservations :");
+            Reservation reservation1 = new Reservation(client1.getId(), vehicule1.getId(), LocalDate.now(), LocalDate.now().plusDays(5));
+            reservationService.create(reservation1);
+            reservationService.findAll().forEach(System.out::println);
+
+            // Suppression d'un client (exemple)
+            System.out.println("\nSuppression d'un client :");
+            clientService.delete(client1.getId());
+            System.out.println("Client supprimé avec succès.");
+
+            // Suppression d'un véhicule (exemple)
+            System.out.println("\nSuppression d'un véhicule :");
+            vehicleService.delete(vehicule1.getId());
+            System.out.println("Véhicule supprimé avec succès.");
+
+            // Suppression d'une réservation (exemple)
+            System.out.println("\nSuppression d'une réservation :");
+            reservationService.delete(reservation1.getId());
+            System.out.println("Réservation supprimée avec succès.");
+
+        } catch (DaoException e) {
+            e.printStackTrace();
+        }
     }
 }
+

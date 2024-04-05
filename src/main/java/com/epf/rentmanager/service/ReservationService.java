@@ -17,7 +17,7 @@ public class ReservationService {
     private ReservationDao reservationDao;
 
     @Autowired
-    private VehicleDao vehicleDao; // Pour vérifier la disponibilité des véhicules.
+    private VehicleDao vehicleDao;
 
     public Reservation findById(long id) throws DaoException {
         return reservationDao.findById(id);

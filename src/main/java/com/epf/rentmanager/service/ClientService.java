@@ -13,8 +13,11 @@ import java.util.List;
 @Service
 public class ClientService {
 
+
 	@Autowired
 	private ClientDao clientDao;
+
+
 
 	public Client findById(long id) throws DaoException {
 		return clientDao.findById(id);
@@ -51,4 +54,5 @@ public class ClientService {
 			throw new DaoException("Le client doit avoir au moins 18 ans.");
 		}
 	}
+
 }

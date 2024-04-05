@@ -37,24 +37,23 @@ public class VehicleService {
 	}
 
 	private void validateVehicle(Vehicule vehicule) throws DaoException {
-		// Vérifier que le constructeur et le modèle ne sont pas vides
+
 		if (vehicule.getConstructeur().trim().isEmpty() || vehicule.getModele().trim().isEmpty()) {
 			throw new DaoException("Le constructeur et le modèle ne peuvent pas être vides.");
 		}
 
-		// Vérifier la longueur du constructeur et du modèle
+
 		if (vehicule.getConstructeur().length() < 2 || vehicule.getModele().length() < 2) {
 			throw new DaoException("Le constructeur et le modèle doivent contenir au moins 2 caractères.");
 		}
 
-		// Exemple de validation de format avec une expression régulière (regex) simple
-		// Ceci est un exemple basique. Adaptez la regex selon vos besoins spécifiques de format.
+
 		String pattern = "^[A-Za-z0-9\\s-]+$"; // Lettres, chiffres, espaces et tirets autorisés
 		if (!Pattern.matches(pattern, vehicule.getConstructeur()) || !Pattern.matches(pattern, vehicule.getModele())) {
 			throw new DaoException("Le constructeur ou le modèle contient des caractères invalides.");
 		}
 
-		// Vérifier le nombre de places
+
 		if (vehicule.getNbPlaces() < 1 || vehicule.getNbPlaces() > 9) {
 			throw new DaoException("Le nombre de places doit être entre 1 et 9.");
 		}

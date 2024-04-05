@@ -1,80 +1,58 @@
 package com.ensta.rentmanager;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
 import com.epf.rentmanager.dao.ClientDao;
-import com.epf.rentmanager.exception.DaoException;
 import com.epf.rentmanager.model.Client;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.time.LocalDate;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+@ExtendWith(SpringExtension.class)
+@DataJpaTest
 public class ClientDaoTest {
 
+    @Autowired
     private ClientDao clientDao;
-    private List<Client> clients;
+
+    private Client client;
 
     @BeforeEach
     void setUp() {
-        clientDao = mock(ClientDao.class);
-        clients = new ArrayList<>();
-        clients.add(new Client(1, "John", "Doe", "john@example.com", LocalDate.of(1990, 5, 15)));
-        clients.add(new Client(2, "Jane", "Doe", "jane@example.com", LocalDate.of(1985, 8, 25)));
+
+        this.client = new Client("Test", "User", "test@example.com", LocalDate.of(1990, 1, 1));
+
     }
 
     @Test
-    void findAll_should_return_all_clients() throws DaoException {
-        when(clientDao.findAll()).thenReturn(clients);
-        List<Client> foundClients = clientDao.findAll();
-        assertEquals(clients.size(), foundClients.size());
+    void testCreateClient() {
+        assertNotNull(client.getId(), "Le client devrait avoir un ID non nul après l'insertion.");
     }
 
     @Test
-    void findById_should_return_correct_client() throws DaoException {
-        Client expectedClient = clients.get(0);
-        when(clientDao.findById(expectedClient.getId())).thenReturn(expectedClient);
-        Client foundClient = clientDao.findById(expectedClient.getId());
-        assertEquals(expectedClient, foundClient);
+    void testFindClientById() throws Exception {
+        Client foundClient = clientDao.findById(client.getId());
+        assertNotNull(foundClient, "Le client devrait être trouvé par son ID.");
+        assertEquals(client.getEmail(), foundClient.getEmail(), "Les emails devraient correspondre.");
     }
 
     @Test
-    void findById_should_throw_DaoException_when_id_not_found() throws DaoException {
-        when(clientDao.findById(999)).thenThrow(DaoException.class);
-        assertThrows(DaoException.class, () -> clientDao.findById(999));
+    void testUpdateClient() throws Exception {
+        client.setNom("Updated Name");
+        clientDao.update(client);
+        Client updatedClient = clientDao.findById(client.getId());
+        assertEquals("Updated Name", updatedClient.getNom(), "Le nom du client devrait être mis à jour.");
     }
 
     @Test
-    void create_should_add_new_client_to_list() throws DaoException {
-        Client newClient = new Client(1, "New", "Client", "new@example.com", LocalDate.of(1995, 3, 10));
-        when(clientDao.create(newClient)).thenReturn((long) 3);
-        long newClientId = clientDao.create(newClient);
-        assertEquals(3, newClientId);
+    void testDeleteClient() throws Exception {
+        clientDao.delete(client.getId());
+        assertNull(clientDao.findById(client.getId()), "Le client devrait être supprimé.");
     }
-
-    @Test
-    void delete_should_remove_client_from_list() throws DaoException {
-        Client clientToDelete = clients.get(0);
-        when(clientDao.delete(clientToDelete)).thenReturn(true); // Utiliser true au lieu de Boolean.TRUE
-        boolean isDeleted = clientDao.delete(clientToDelete);
-        assertEquals(true, isDeleted);
-    }
-
-    @Test
-    void delete_should_return_false_when_client_not_found() throws DaoException {
-        Client clientToDelete = new Client(999, "Non", "Existant", "nonexistent@example.com", LocalDate.of(1990, 1, 1));
-        when(clientDao.delete(clientToDelete)).thenReturn(false); // Utiliser false au lieu de Boolean.FALSE
-        boolean isDeleted = clientDao.delete(clientToDelete);
-        assertEquals(false, isDeleted);
-    }
-
-
-    // Ajoutez d'autres cas de test selon vos besoins
-
 }

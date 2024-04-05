@@ -37,6 +37,8 @@ public class ClientDao {
 			rs.getDate("naissance").toLocalDate()
 	);
 
+
+
 	public long create(Client client) throws DaoException {
 		jdbcTemplate.update(CREATE_CLIENT_QUERY,
 				client.getNom(),

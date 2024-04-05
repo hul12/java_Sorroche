@@ -1,8 +1,7 @@
 package com.epf.rentmanager.servlet;
 
-
-import com.epf.rentmanager.model.Vehicule;
-import com.epf.rentmanager.service.VehicleService;
+import com.epf.rentmanager.model.Reservation;
+import com.epf.rentmanager.service.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
@@ -15,12 +14,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/cars")
-public class VehicleListServlet extends HttpServlet {
+@WebServlet("/rents")
+public class ReservationListServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     @Autowired
-    private VehicleService vehicleService;
+    private ReservationService reservationService;
 
     @Override
     public void init() throws ServletException {
@@ -30,11 +29,11 @@ public class VehicleListServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            List<Vehicule> vehicles = vehicleService.findAll();
-            request.setAttribute("vehicles", vehicles);
-            request.getRequestDispatcher("/WEB-INF/views/vehicles/list.jsp").forward(request, response);
+            List<Reservation> reservations = reservationService.findAll();
+            request.setAttribute("reservations", reservations);
+            request.getRequestDispatcher("/WEB-INF/views/rents/list.jsp").forward(request, response);
         } catch (Exception e) {
-            throw new ServletException("Erreur lors de la récupération de la liste des véhicules", e);
+            throw new ServletException("Erreur lors de la récupération des réservations", e);
         }
     }
 }

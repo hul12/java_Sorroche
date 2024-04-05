@@ -10,11 +10,18 @@ public class Reservation {
     private LocalDate debut;
     private LocalDate fin;
 
-    // Constructeur par défaut
+
     public Reservation() {
     }
 
-    // Constructeur avec tous les attributs
+    public Reservation(long clientId, long vehicleId, LocalDate debut, LocalDate fin) {
+        this.clientId = clientId;
+        this.vehicleId = vehicleId;
+        this.debut = debut;
+        this.fin = fin;
+    }
+
+    // Ajout d'un nouveau constructeur avec l'ID
     public Reservation(long id, long clientId, long vehicleId, LocalDate debut, LocalDate fin) {
         this.id = id;
         this.clientId = clientId;
@@ -23,7 +30,7 @@ public class Reservation {
         this.fin = fin;
     }
 
-    // Getters et Setters
+
     public long getId() {
         return id;
     }
@@ -64,7 +71,7 @@ public class Reservation {
         this.fin = fin;
     }
 
-    // Méthode toString
+
     @Override
     public String toString() {
         return "Reservation{" +

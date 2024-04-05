@@ -10,11 +10,11 @@ public class Client {
     private String email;
     private LocalDate dateNaissance;
 
-    // Constructeur par défaut
+
     public Client() {
     }
 
-    // Constructeur avec tous les attributs
+
     public Client(long id, String nom, String prenom, String email, LocalDate dateNaissance) {
         this.id = id;
         this.nom = nom;
@@ -23,7 +23,11 @@ public class Client {
         this.dateNaissance = dateNaissance;
     }
 
-    // Getters et Setters
+    public Client(String nom, String prenom, String email, LocalDate dateNaissance) {
+        this(0, nom, prenom, email, dateNaissance);
+    }
+
+
     public long getId() {
         return id;
     }
@@ -64,7 +68,7 @@ public class Client {
         this.dateNaissance = dateNaissance;
     }
 
-    // Méthode toString pour afficher les informations du client
+
     @Override
     public String toString() {
         return "Client{" +

@@ -3,15 +3,15 @@ package com.epf.rentmanager.model;
 public class Vehicule {
 
     private long id;
-    private String constructeur; // Marque du véhicule
+    private String constructeur;
     private String modele;
     private int nbPlaces;
 
-    // Constructeur par défaut
+
     public Vehicule() {
     }
 
-    // Constructeur avec tous les attributs
+
     public Vehicule(long id, String constructeur, String modele, int nbPlaces) {
         this.id = id;
         this.constructeur = constructeur;
@@ -19,7 +19,14 @@ public class Vehicule {
         this.nbPlaces = nbPlaces;
     }
 
-    // Getters et Setters
+    // Constructeur sans ID (si déjà existant, ne changez rien)
+    public Vehicule(String constructeur, String modele, int nbPlaces) {
+        this.constructeur = constructeur;
+        this.modele = modele;
+        this.nbPlaces = nbPlaces;
+    }
+
+
     public long getId() {
         return id;
     }
@@ -52,7 +59,7 @@ public class Vehicule {
         this.nbPlaces = nbPlaces;
     }
 
-    // Méthode toString
+
     @Override
     public String toString() {
         return "Vehicule{" +
