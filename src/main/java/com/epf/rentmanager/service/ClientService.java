@@ -2,6 +2,7 @@ package com.epf.rentmanager.service;
 
 import com.epf.rentmanager.dao.ClientDao;
 import com.epf.rentmanager.exception.DaoException;
+import com.epf.rentmanager.exception.ServiceException;
 import com.epf.rentmanager.model.Client;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,21 +38,26 @@ public class ClientService {
 	}
 
 
-	public int delete(long id) throws DaoException {
-		return clientDao.delete(id);
+	public long delete(long client) throws ServiceException {
+		try {
+			return clientDao.delete(client);
+		} catch (DaoException e) {
+			throw new ServiceException("Une erreur a eu lieu lors de la suppression du client");
+		}
 	}
+
 
 	private void validateClient(Client client) throws DaoException {
 		if (client.getEmail() == null || !client.getEmail().contains("@")) {
-			throw new DaoException("L'adresse email du client est invalide.");
+			throw new DaoException();
 		}
 		if (client.getNom().length() < 3 || client.getPrenom().length() < 3) {
-			throw new DaoException("Le nom et le prénom du client doivent contenir au moins 3 caractères.");
+			throw new DaoException();
 		}
 		LocalDate today = LocalDate.now();
 		Period period = Period.between(client.getDateNaissance(), today);
 		if (period.getYears() < 18) {
-			throw new DaoException("Le client doit avoir au moins 18 ans.");
+			throw new DaoException();
 		}
 	}
 

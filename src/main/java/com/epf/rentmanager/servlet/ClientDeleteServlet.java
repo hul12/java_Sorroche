@@ -1,6 +1,5 @@
 package com.epf.rentmanager.servlet;
 
-import com.epf.rentmanager.exception.DaoException;
 import com.epf.rentmanager.exception.ServiceException;
 import com.epf.rentmanager.model.Client;
 import com.epf.rentmanager.service.ClientService;
@@ -14,35 +13,38 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.LocalDate;
 
-@WebServlet("/users/create")
-public class ClientCreateServlet extends HttpServlet {
+@WebServlet("/users/delete")
+public class ClientDeleteServlet extends HttpServlet {
+
     private static final long serialVersionUID = 1L;
 
     @Autowired
-     ClientService clientService;
+    private ClientService clientService;
+
     @Override
     public void init() throws ServletException {
         super.init();
         SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
     }
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("/WEB-INF/views/users/create.jsp").forward(request, response);
-    }
-
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String nom = request.getParameter("nom");
-        String prenom = request.getParameter("prenom");
-        String email = request.getParameter("email");
-
-
-        Client client = new Client(nom, prenom, email);
+        String idParam = request.getParameter("id");
+        if (idParam == null || idParam.isEmpty()) {
+            response.sendRedirect(request.getContextPath() + "/users");
+            return;
+        }
 
         try {
-            clientService.create(client);
-
-        } catch (Exception e) {
+            long id = Long.parseLong(idParam);
+            long nb_delete = clientService.delete(new Client(id).getId());
+            clientService.delete(id);
+            if (nb_delete > 0) {
+                IOUtils.print("Client deleted");
+            } else {
+                IOUtils.print("Client not found");
+            }
+        } catch (ServiceException e) {
             IOUtils.print(e.getMessage());
         }
         response.sendRedirect(request.getContextPath() + "/users");

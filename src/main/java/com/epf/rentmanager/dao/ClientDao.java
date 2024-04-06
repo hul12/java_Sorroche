@@ -25,15 +25,16 @@ public class ClientDao {
 			pstmt.setString(3, client.getEmail());
 			pstmt.setDate(4, Date.valueOf(client.getDateNaissance()));
 			pstmt.executeUpdate();
+			ResultSet resultSet = pstmt.getGeneratedKeys();
 			try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
-				if (generatedKeys.next()) {
-					return generatedKeys.getLong(1);
+				if (resultSet.next()) {
+					return resultSet.getInt(1);
 				} else {
-					throw new DaoException("Creating user failed, no ID obtained.");
+					throw new DaoException();
 				}
 			}
 		} catch (SQLException e) {
-			throw new DaoException("Problem occurred when creating client", e);
+			throw new DaoException();
 		}
 	}
 
@@ -47,7 +48,7 @@ public class ClientDao {
 				}
 			}
 		} catch (SQLException e) {
-			throw new DaoException("Problem occurred when finding client by ID", e);
+			throw new DaoException();
 		}
 		return null;
 	}
@@ -61,18 +62,24 @@ public class ClientDao {
 				clients.add(new Client(rs.getLong("id"), rs.getString("nom"), rs.getString("prenom"), rs.getString("email"), rs.getDate("naissance").toLocalDate()));
 			}
 		} catch (SQLException e) {
-			throw new DaoException("Problem occurred when finding all clients", e);
+			throw new DaoException();
 		}
 		return clients;
 	}
 
-	public int delete(long id) throws DaoException {
+	public long delete(long id) throws DaoException {
 		try (Connection conn = ConnectionManager.getConnection();
 			 PreparedStatement pstmt = conn.prepareStatement(DELETE_CLIENT_QUERY)) {
 			pstmt.setLong(1, id);
-			return pstmt.executeUpdate();
+			int affectedRows = pstmt.executeUpdate();
+			if (affectedRows > 0) {
+				return affectedRows;
+			} else {
+				throw new DaoException();
+			}
+
 		} catch (SQLException e) {
-			throw new DaoException("Problem occurred when deleting client", e);
+			throw new DaoException();
 		}
 	}
 
@@ -86,7 +93,7 @@ public class ClientDao {
 			pstmt.setLong(5, client.getId());
 			return pstmt.executeUpdate();
 		} catch (SQLException e) {
-			throw new DaoException("Problem occurred when updating client", e);
+			throw new DaoException();
 		}
 	}
 }

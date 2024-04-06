@@ -2,6 +2,7 @@ package com.epf.rentmanager.main;
 
 import com.epf.rentmanager.confi.AppConfiguration;
 import com.epf.rentmanager.exception.DaoException;
+import com.epf.rentmanager.exception.ServiceException;
 import com.epf.rentmanager.model.Client;
 import com.epf.rentmanager.model.Reservation;
 import com.epf.rentmanager.model.Vehicule;
@@ -58,6 +59,8 @@ public class Main {
 
         } catch (DaoException e) {
             e.printStackTrace();
+        } catch (ServiceException e) {
+            throw new RuntimeException(e);
         }
     }
 }

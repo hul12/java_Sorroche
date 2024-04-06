@@ -27,7 +27,7 @@ public class VehicleDao {
 				vehicules.add(mapToVehicule(rs));
 			}
 		} catch (SQLException e) {
-			throw new DaoException("Problem occurred when finding all vehicles", e);
+			throw new DaoException();
 		}
 		return vehicules;
 	}
@@ -42,7 +42,7 @@ public class VehicleDao {
 				}
 			}
 		} catch (SQLException e) {
-			throw new DaoException("Problem occurred when finding vehicle by ID", e);
+			throw new DaoException();
 		}
 		return null;
 	}
@@ -55,11 +55,11 @@ public class VehicleDao {
 			pstmt.setInt(3, vehicule.getNbPlaces());
 			int affectedRows = pstmt.executeUpdate();
 			if (affectedRows == 0) {
-				throw new DaoException("Creating vehicle failed, no rows affected.");
+				throw new DaoException();
 			}
 			return affectedRows;
 		} catch (SQLException e) {
-			throw new DaoException("Problem occurred when creating vehicle", e);
+			throw new DaoException();
 		}
 	}
 
@@ -69,7 +69,7 @@ public class VehicleDao {
 			pstmt.setLong(1, id);
 			return pstmt.executeUpdate();
 		} catch (SQLException e) {
-			throw new DaoException("Problem occurred when deleting vehicle", e);
+			throw new DaoException();
 		}
 	}
 
@@ -82,7 +82,7 @@ public class VehicleDao {
 			pstmt.setLong(4, vehicule.getId());
 			return pstmt.executeUpdate();
 		} catch (SQLException e) {
-			throw new DaoException("Problem occurred when updating vehicle", e);
+			throw new DaoException();
 		}
 	}
 

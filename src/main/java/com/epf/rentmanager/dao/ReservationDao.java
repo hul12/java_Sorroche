@@ -28,7 +28,7 @@ public class ReservationDao {
 				reservations.add(mapToReservation(rs));
 			}
 		} catch (SQLException e) {
-			throw new DaoException("Problem occurred when finding all reservations", e);
+			throw new DaoException();
 		}
 		return reservations;
 	}
@@ -43,7 +43,7 @@ public class ReservationDao {
 				}
 			}
 		} catch (SQLException e) {
-			throw new DaoException("Problem occurred when finding reservation by ID", e);
+			throw new DaoException();
 		}
 		return null;
 	}
@@ -57,11 +57,11 @@ public class ReservationDao {
 			pstmt.setDate(4, Date.valueOf(reservation.getFin()));
 			int affectedRows = pstmt.executeUpdate();
 			if (affectedRows == 0) {
-				throw new DaoException("Creating reservation failed, no rows affected.");
+				throw new DaoException();
 			}
 			return affectedRows;
 		} catch (SQLException e) {
-			throw new DaoException("Problem occurred when creating reservation", e);
+			throw new DaoException();
 		}
 	}
 
@@ -71,7 +71,7 @@ public class ReservationDao {
 			pstmt.setLong(1, id);
 			return pstmt.executeUpdate();
 		} catch (SQLException e) {
-			throw new DaoException("Problem occurred when deleting reservation", e);
+			throw new DaoException();
 		}
 	}
 
@@ -85,7 +85,7 @@ public class ReservationDao {
 			pstmt.setLong(5, reservation.getId());
 			return pstmt.executeUpdate();
 		} catch (SQLException e) {
-			throw new DaoException("Problem occurred when updating reservation", e);
+			throw new DaoException();
 		}
 	}
 
@@ -100,7 +100,7 @@ public class ReservationDao {
 				}
 			}
 		} catch (SQLException e) {
-			throw new DaoException("Problem occurred when finding reservations by vehicle ID", e);
+			throw new DaoException();
 		}
 		return reservations;
 	}

@@ -27,6 +27,13 @@ public class Client {
         this(0, nom, prenom, email, dateNaissance);
     }
 
+    public Client(long id) {
+        this(id, "", "", "", LocalDate.now());
+    }
+    public Client(String nom, String prenom, String email) {
+        this((long) 0, nom, prenom, email, LocalDate.now());
+    }
+
 
     public long getId() {
         return id;

@@ -34,7 +34,7 @@ public class ReservationCreateServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         super.init();
-        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, getServletContext());
+        SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

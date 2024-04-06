@@ -45,7 +45,7 @@ public class ReservationService {
 
     private void validateReservationDates(Reservation reservation) throws DaoException {
         if (reservation.getDebut().isAfter(reservation.getFin())) {
-            throw new DaoException("La date de début doit être avant la date de fin.");
+            throw new DaoException();
         }
     }
 
@@ -54,7 +54,7 @@ public class ReservationService {
         for (Reservation existingReservation : reservations) {
             if (reservation.getDebut().isBefore(existingReservation.getFin()) &&
                     reservation.getFin().isAfter(existingReservation.getDebut())) {
-                throw new DaoException("Le véhicule est déjà réservé pour les dates sélectionnées.");
+                throw new DaoException();
             }
         }
     }
@@ -65,7 +65,7 @@ public class ReservationService {
             if (existingReservation.getId() != reservation.getId() &&
                     reservation.getDebut().isBefore(existingReservation.getFin()) &&
                     reservation.getFin().isAfter(existingReservation.getDebut())) {
-                throw new DaoException("Le véhicule est déjà réservé pour les dates sélectionnées.");
+                throw new DaoException();
             }
         }
     }

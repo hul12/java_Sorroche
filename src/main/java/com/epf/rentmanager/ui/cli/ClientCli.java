@@ -1,6 +1,7 @@
 package com.epf.rentmanager.ui.cli;
 
 import com.epf.rentmanager.exception.DaoException;
+import com.epf.rentmanager.exception.ServiceException;
 import com.epf.rentmanager.model.Client;
 import com.epf.rentmanager.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,7 +93,7 @@ public class ClientCli {
             long id = scanner.nextLong();
             clientService.delete(id);
             System.out.println("Client supprimé avec succès.");
-        } catch (DaoException e) {
+        } catch (Exception e) {
             System.err.println("Erreur lors de la suppression du client: " + e.getMessage());
         }
     }

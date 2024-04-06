@@ -1,3 +1,4 @@
+
 package com.epf.rentmanager.confi;
 
 import org.springframework.context.annotation.Configuration;
@@ -14,7 +15,8 @@ import javax.servlet.ServletException;
 public class WebConfiguration implements WebApplicationInitializer {
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
-        AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
+        AnnotationConfigWebApplicationContext rootContext = new
+                AnnotationConfigWebApplicationContext();
         rootContext.register(AppConfiguration.class);
         servletContext.addListener(new ContextLoaderListener(rootContext));
     }
