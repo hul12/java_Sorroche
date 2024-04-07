@@ -71,7 +71,7 @@ public class ClientCli {
             clientService.create(client);
 
             System.out.println("Client ajouté avec succès.");
-        } catch (DaoException e) {
+        } catch (DaoException | ServiceException e) {
             System.err.println("Erreur lors de l'ajout du client: " + e.getMessage());
         }
     }
@@ -82,7 +82,7 @@ public class ClientCli {
             for (Client client : clients) {
                 System.out.println(client);
             }
-        } catch (DaoException e) {
+        } catch (Exception e) {
             System.err.println("Erreur lors de la récupération des clients: " + e.getMessage());
         }
     }

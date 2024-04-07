@@ -80,7 +80,7 @@ public class VehiculeCli {
             for (Vehicule vehicule : vehicules) {
                 System.out.println(vehicule);
             }
-        } catch (DaoException e) {
+        } catch (Exception e) {
             System.err.println("Erreur lors de la récupération des véhicules: " + e.getMessage());
         }
     }

@@ -41,13 +41,13 @@
                                     <td>10/01/2019</td>
                                     <td>13/01/2019</td>
                                     <td>
-                                        <a class="btn btn-primary disabled" href="${pageContext.request.contextPath}/cars?id=1">
+                                        <a class="btn btn-primary " href="${pageContext.request.contextPath}/rents/details?id=1}">
                                             <i class="fa fa-play"></i>
                                         </a>
-                                        <a class="btn btn-success disabled" href="#">
+                                        <a class="btn btn-success " href="${pageContext.request.contextPath}/rents/update?id=${rent.id()}">
                                             <i class="fa fa-edit"></i>
                                         </a>
-                                        <a class="btn btn-danger disabled" href="#">
+                                        <a class="btn btn-danger " href="${pageContext.request.contextPath}/rents/delete?id=${rent.id()}"   >
                                             <i class="fa fa-trash"></i>
                                         </a>
                                     </td>
@@ -56,17 +56,17 @@
                                 <tr>
                                     <td>2.</td>
                                     <td>Citroen C2</td>
-                                    <td>Jane Doe</td>
+                                    <td>Jone phone</td>
                                     <td>10/01/2019</td>
                                     <td>13/01/2019</td>
                                     <td>
-                                        <a class="btn btn-primary disabled" href="${pageContext.request.contextPath}/cars?id=2">
+                                        <a class="btn btn-primary " href="${pageContext.request.contextPath}/rents/details?id=2}">
                                             <i class="fa fa-play"></i>
                                         </a>
-                                        <a class="btn btn-success disabled" href="#">
+                                        <a class="btn btn-success " href="${pageContext.request.contextPath}/rents/update?id=${rent.id()}">
                                             <i class="fa fa-edit"></i>
                                         </a>
-                                        <a class="btn btn-danger disabled" href="#">
+                                        <a class="btn btn-danger " href="${pageContext.request.contextPath}/rents/delete?id=${rent.id()}">
                                             <i class="fa fa-trash"></i>
                                         </a>
                                     </td>

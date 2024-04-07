@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ClientService {
@@ -18,24 +19,44 @@ public class ClientService {
 	@Autowired
 	private ClientDao clientDao;
 
+	private void validateClient(Client client) throws DaoException, ServiceException {
+		if (client.getEmail() == null || !client.getEmail().contains("@")) {
+			throw new DaoException();
+		}
+		if (client.getNom().length() < 3 || client.getPrenom().length() < 3) {
+			throw new DaoException();
+		}
+		if (client.getDateNaissance() == null || client.getDateNaissance().isAfter(java.time.LocalDate.now().minusYears(18)))
+			throw new ServiceException("Date de naissance invalide");
+		LocalDate today = LocalDate.now();
+		Period period = Period.between(client.getDateNaissance(), today);
+		if (period.getYears() < 18) {
+			throw new DaoException();
+		}
 
-
-	public Client findById(long id) throws DaoException {
-		return clientDao.findById(id);
 	}
 
-	public List<Client> findAll() throws DaoException {
-		return clientDao.findAll();
+	public Optional<Client> findById(long id) throws ServiceException {
+		try {
+			return clientDao.findById(id);
+		} catch (DaoException e) {
+			throw new ServiceException("erreur");
+		}
 	}
 
-	public long create(Client client) throws DaoException {
+	public   List<Client> findAll() throws ServiceException {
+		try {
+			return clientDao.findAll();
+		} catch (DaoException e) {
+			throw new ServiceException("erreur");
+		}
+	}
+
+	public long create(Client client) throws DaoException, ServiceException {
 		validateClient(client);
 		return clientDao.create(client);
 	}
 
-	public int update(Client client) throws DaoException {
-		return clientDao.update(client);
-	}
 
 
 	public long delete(long client) throws ServiceException {
@@ -47,17 +68,16 @@ public class ClientService {
 	}
 
 
-	private void validateClient(Client client) throws DaoException {
-		if (client.getEmail() == null || !client.getEmail().contains("@")) {
-			throw new DaoException();
-		}
-		if (client.getNom().length() < 3 || client.getPrenom().length() < 3) {
-			throw new DaoException();
-		}
-		LocalDate today = LocalDate.now();
-		Period period = Period.between(client.getDateNaissance(), today);
-		if (period.getYears() < 18) {
-			throw new DaoException();
+
+
+
+	public void update(Client client) throws Exception {
+		validateClient(client);
+
+		try {
+			clientDao.update(client);
+		} catch (DaoException e) {
+			throw new ServiceException();
 		}
 	}
 

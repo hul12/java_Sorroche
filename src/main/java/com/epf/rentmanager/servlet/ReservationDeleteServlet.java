@@ -1,11 +1,10 @@
 package com.epf.rentmanager.servlet;
 
+import com.epf.rentmanager.exception.DaoException;
 import com.epf.rentmanager.exception.ServiceException;
-import com.epf.rentmanager.model.Reservation;
 import com.epf.rentmanager.service.ReservationService;
 import com.epf.rentmanager.utils.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import javax.servlet.ServletException;
@@ -14,11 +13,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 
-@WebServlet("/rents")
-public class ReservationListServlet extends HttpServlet {
-    private static final long serialVersionUID = 1L;
+@WebServlet("/rents/delete")
+public class ReservationDeleteServlet extends HttpServlet {
 
     @Autowired
     private ReservationService reservationService;
@@ -26,18 +23,28 @@ public class ReservationListServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         super.init();
-        SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
+        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, getServletContext());
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse
-            response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String idParam = request.getParameter("id");
+        if (idParam == null || idParam.isEmpty()) {
+
+            response.sendRedirect(request.getContextPath() + "/rents?error=MissingId");
+            return;
+        }
+
         try {
-            request.setAttribute("rents", reservationService.findAll());
+            long id = Long.parseLong(idParam);
+            reservationService.delete(id);
+
         } catch (Exception e) {
             IOUtils.print(e.getMessage());
         }
+        response.sendRedirect(request.getContextPath() + "/rents");
+    }
 
-        this.getServletContext().getRequestDispatcher("/WEB-INF/views/rents/list.jsp").forward(request, response);
 
     }
-}
+

@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 @Repository
 public class ClientDao {
 
@@ -38,13 +40,13 @@ public class ClientDao {
 		}
 	}
 
-	public Client findById(long id) throws DaoException {
+	public Optional<Client> findById(long id) throws DaoException {
 		try (Connection conn = ConnectionManager.getConnection();
 			 PreparedStatement pstmt = conn.prepareStatement(FIND_CLIENT_BY_ID_QUERY)) {
 			pstmt.setLong(1, id);
 			try (ResultSet rs = pstmt.executeQuery()) {
 				if (rs.next()) {
-					return new Client(rs.getLong("id"), rs.getString("nom"), rs.getString("prenom"), rs.getString("email"), rs.getDate("naissance").toLocalDate());
+					return Optional.of(new Client(rs.getLong("id"), rs.getString("nom"), rs.getString("prenom"), rs.getString("email"), rs.getDate("naissance").toLocalDate()));
 				}
 			}
 		} catch (SQLException e) {

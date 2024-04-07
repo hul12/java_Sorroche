@@ -42,10 +42,10 @@
                                         <a class="btn btn-primary" href="${pageContext.request.contextPath}/users/details?id=1">
                                         <i class="fa fa-play"></i>
                                         </a>
-                                        <a class="btn btn-success disabled" href="#">
+                                        <a class="btn btn-success" href="${pageContext.request.contextPath}/users/update?id=${user.id()}">
                                             <i class="fa fa-edit"></i>
                                         </a>
-                                        <a class="btn btn-danger disabled" href="#">
+                                        <a class="btn btn-danger" href="${pageContext.request.contextPath}/users/delete?id=${user.id()}">
                                             <i class="fa fa-trash"></i>
                                         </a>
                                     </td>
@@ -53,9 +53,9 @@
 
                                 <tr>
                                     <td>2.</td>
-                                    <td>Jane</td>
-                                    <td>Doe</td>
-                                    <td>jane.doe@epf.fr</td>
+                                    <td>Jone</td>
+                                    <td>phone</td>
+                                    <td>jone.phone@epf.fr</td>
                                     <td>
                                         <a class="btn btn-primary" href="${pageContext.request.contextPath}/users/details?id=2">
                                             <i class="fa fa-play"></i>
@@ -68,6 +68,7 @@
                                         </a>
                                     </td>
                                 </tr>
+
                             </table>
                         </div>
                         <!-- /.box-body -->

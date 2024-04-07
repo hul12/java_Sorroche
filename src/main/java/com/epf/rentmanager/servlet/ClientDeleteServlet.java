@@ -30,13 +30,9 @@ public class ClientDeleteServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String idParam = request.getParameter("id");
-        if (idParam == null || idParam.isEmpty()) {
-            response.sendRedirect(request.getContextPath() + "/users");
-            return;
-        }
 
         try {
-            long id = Long.parseLong(idParam);
+            long id = Long.parseLong(request.getParameter("id"));
             long nb_delete = clientService.delete(new Client(id).getId());
             clientService.delete(id);
             if (nb_delete > 0) {

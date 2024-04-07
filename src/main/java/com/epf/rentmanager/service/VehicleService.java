@@ -2,6 +2,7 @@ package com.epf.rentmanager.service;
 
 import com.epf.rentmanager.dao.VehicleDao;
 import com.epf.rentmanager.exception.DaoException;
+import com.epf.rentmanager.exception.ServiceException;
 import com.epf.rentmanager.model.Vehicule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,8 +19,12 @@ public class VehicleService {
 		return vehicleDao.findById(id);
 	}
 
-	public List<Vehicule> findAll() throws DaoException {
-		return vehicleDao.findAll();
+	public List<Vehicule> findAll() throws ServiceException {
+		try {
+			return vehicleDao.findAll();
+		} catch (DaoException e) {
+			throw new ServiceException("Une erreur a eu lieu lors de la récupération des véhicules");
+		}
 	}
 
 	public int create(Vehicule vehicule) throws DaoException {
@@ -58,4 +63,6 @@ public class VehicleService {
 			throw new DaoException();
 		}
 	}
+
+
 }
