@@ -53,7 +53,7 @@ public class VehicleService {
 		}
 
 
-		String pattern = "^[A-Za-z0-9\\s-]+$"; // Lettres, chiffres, espaces et tirets autorisés
+		String pattern = "^[A-Za-z0-9\\s-]+$";
 		if (!Pattern.matches(pattern, vehicule.getConstructeur()) || !Pattern.matches(pattern, vehicule.getModele())) {
 			throw new DaoException();
 		}

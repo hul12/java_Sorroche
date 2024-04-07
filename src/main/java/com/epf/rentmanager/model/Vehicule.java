@@ -19,7 +19,7 @@ public class Vehicule {
         this.nbPlaces = nbPlaces;
     }
 
-    // Constructeur sans ID (si déjà existant, ne changez rien)
+
     public Vehicule(String constructeur, String modele, int nbPlaces) {
         this.constructeur = constructeur;
         this.modele = modele;

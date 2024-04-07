@@ -11,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -37,17 +38,22 @@ public class ClientDaoTest {
 
     @Test
     void testFindClientById() throws Exception {
-        Client foundClient = clientDao.findById(client.getId());
-        assertNotNull(foundClient, "Le client devrait être trouvé par son ID.");
-        assertEquals(client.getEmail(), foundClient.getEmail(), "Les emails devraient correspondre.");
+        Optional<Client> foundClientOpt = clientDao.findById(client.getId());
+        assertTrue(foundClientOpt.isPresent(), "Le client devrait être trouvé par son ID.");
+        foundClientOpt.ifPresent(foundClient -> {
+            assertEquals(client.getEmail(), foundClient.getEmail(), "Les emails devraient correspondre.");
+        });
     }
 
     @Test
     void testUpdateClient() throws Exception {
         client.setNom("Updated Name");
         clientDao.update(client);
-        Client updatedClient = clientDao.findById(client.getId());
-        assertEquals("Updated Name", updatedClient.getNom(), "Le nom du client devrait être mis à jour.");
+        Optional<Client> updatedClientOpt = clientDao.findById(client.getId());
+        assertTrue(updatedClientOpt.isPresent(), "Le client mis à jour devrait être trouvé par son ID.");
+        updatedClientOpt.ifPresent(updatedClient -> {
+            assertEquals("Updated Name", updatedClient.getNom(), "Le nom du client devrait être mis à jour.");
+        });
     }
 
     @Test

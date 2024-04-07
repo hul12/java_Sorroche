@@ -1,7 +1,7 @@
 package com.epf.rentmanager.service;
 
 import com.epf.rentmanager.dao.ReservationDao;
-import com.epf.rentmanager.dao.VehicleDao; // Supposons que vous avez un DAO pour accéder aux données des véhicules.
+import com.epf.rentmanager.dao.VehicleDao;
 import com.epf.rentmanager.exception.DaoException;
 import com.epf.rentmanager.model.Reservation;
 import org.springframework.beans.factory.annotation.Autowired;

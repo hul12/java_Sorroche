@@ -23,13 +23,12 @@ import java.time.LocalDate;
 public class ReservationCreateServlet extends HttpServlet {
 
     @Autowired
-    private ReservationService reservationService; // Instance créée par Spring
+    private ReservationService reservationService;
 
     @Autowired
-    private ClientService clientService; // Instance créée par Spring
-
+    private ClientService clientService;
     @Autowired
-    private VehicleService vehicleService; // Instance créée par Spring
+    private VehicleService vehicleService;
 
     @Override
     public void init() throws ServletException {
@@ -40,7 +39,7 @@ public class ReservationCreateServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            // Accès aux méthodes à travers des instances, pas de manière statique
+
             request.setAttribute("clients", clientService.findAll());
             request.setAttribute("vehicles", vehicleService.findAll());
         } catch (ServiceException e) {

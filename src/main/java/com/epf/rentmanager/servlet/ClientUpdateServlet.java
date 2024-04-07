@@ -31,25 +31,21 @@ public class ClientUpdateServlet extends HttpServlet {
         SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String idParam = request.getParameter("id");
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         try {
-            long id = Long.parseLong(request.getParameter("id"));
-            Optional<Client> client = clientService.findById(id);
-            if (client.isPresent()) {
-                request.setAttribute("user", client.get());
-            } else {
-                IOUtils.print("Client not found");
-            }
+            request.setAttribute("client", clientService.findById(
+                    Long.parseLong(request.getParameter("id"))));
         } catch (ServiceException e) {
-            IOUtils.print(e.getMessage());
+            throw new ServletException();
         }
         this.getServletContext().getRequestDispatcher("/WEB-INF/views/users/update.jsp").forward(request, response);
     }
 
 
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Récupérer les données du formulaire
+
         long id = Long.parseLong(request.getParameter("id"));
         String nom = request.getParameter("nom");
         String prenom = request.getParameter("prenom");

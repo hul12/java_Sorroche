@@ -122,7 +122,7 @@ public class IOUtils {
 	public static long readLong() {
 		Scanner scanner = new Scanner(System.in);
 		long value = scanner.nextLong();
-		scanner.nextLine(); // pour consommer la nouvelle ligne
+		scanner.nextLine();
 		return value;
 	}
 }
